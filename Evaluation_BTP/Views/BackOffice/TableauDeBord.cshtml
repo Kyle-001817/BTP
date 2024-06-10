@@ -1,0 +1,110 @@
+@{
+    Layout = "_LayoutBackOffice";
+}
+
+
+<main id="main" class="main">
+<div class="pagetitle">
+    <h1>Tableau de bord</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a>Statistique</a></li>
+            <li class="breadcrumb-item active">Histogramme des montant des devis par mois et année</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+
+<canvas id="barChart" style="max-height: 400px;"></canvas>
+<div id="pieChart"></div>
+
+</section>
+</main><!-- End #main -->
+
+<canvas id="barChart" width="800" height="400"></canvas>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const histogrammeData = @Html.Raw(Json.Serialize(ViewBag.Histogramme));
+
+        // Fonction pour convertir le numéro de mois en nom de mois complet
+        function getMonthName(monthNumber) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[monthNumber - 1];
+        }
+
+        const labels = histogrammeData.map(h => `${getMonthName(h.month)}/${h.year}`);
+        const montants = histogrammeData.map(h => h.totalMontant);
+
+        // Tableau de couleurs pour les barres de l'histogramme
+        const backgroundColors = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ];
+
+        const config = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Montant des devis',
+                    backgroundColor: backgroundColors,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    data: montants 
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Mois/Année'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Montant des devis'
+                        }
+                    }
+                }
+            }
+        };
+
+        const myChart = new Chart(
+            document.getElementById('barChart'),
+            config
+        );
+    });
+</script>
+
+@* <!-- Pie Chart -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    new ApexCharts(document.querySelector("#pieChart"), {
+    series: [15,26 ,28 ,24 ,90 ],
+    chart: {
+        height: 350,
+        type: 'pie',
+        toolbar: {
+        show: true
+        }
+    },
+    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E']
+    }).render();
+});
+</script>
+<!-- End Pie Chart --> *@

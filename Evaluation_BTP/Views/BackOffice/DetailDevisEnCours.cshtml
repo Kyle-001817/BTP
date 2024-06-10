@@ -1,0 +1,72 @@
+@{
+    Layout = "_LayoutBackOffice";
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Detail de travaux a effectué  </h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="BackOffice" asp-action="Index">Accueil</a></li>
+               
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Devis</h5>
+                        @{
+                            double total = 0;
+                            double to = 0;
+                        }
+                        <!-- Table with stripped rows -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ref</th>
+                                    <th scope="col">Designation</th>
+                                    <th scope="col">Unite</th>
+                                    <th scope="col">Quantite</th>
+                                    <th scope="col">Prix unitaire</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach(var devis in ViewBag.Devis){
+                                    total = devis.Travaux.PrixUnitaire * devis.Quantite;
+                                <tr>
+                                    <th scope="row">@devis.Id</th>
+                                    <td>@devis.Travaux.Designation</td>
+                                    <td>@devis.Unite.Nom</td>
+                                    <td>@devis.Quantite</td>
+                                    <td>@devis.Travaux.PrixUnitaire.ToString("N2") Ar</td>
+                                    <td>@total.ToString("N2") Ar</td>
+                                </tr>
+                                to +=total;
+                                }  
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <th scope="row">Total </th>
+                                    <td>@to.ToString("N2") Ar</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
